@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react"
 import { usuarioFindAll } from "../lib/api/usuarios"
-import UsuarioEditar from "./usuarioEditar";
+import { UsuarioEditar } from "./usuarioEditar";
 
 const Usuarios = () => {
     const [usuarios, setUsuarios] = useState<any[]>([]);
     const [usuarioSelecionado, setUsuarioSelecionado] = useState<any | null>();
 
     useEffect(() => {
-        const fetchBuscaUsuario = async () => {
+       fetchBuscaUsuario();
+    }, []);
+
+     const fetchBuscaUsuario = async () => {
             const response = await usuarioFindAll()
             if (response) {
                 setUsuarios(response)
@@ -17,9 +20,6 @@ const Usuarios = () => {
                 return []
             };
         };
-
-        fetchBuscaUsuario();
-    }, []);
 
     const handleEditar = (usuario: any) => {
         setUsuarioSelecionado(usuario);
@@ -61,7 +61,14 @@ const Usuarios = () => {
             </div>
 
             {usuarioSelecionado && (
-                <UsuarioEditar usuario={usuarioSelecionado}/>
+                <UsuarioEditar 
+                usuario={usuarioSelecionado} 
+                onClose={() => setUsuarioSelecionado(null)}
+                onAtualizar={async () => {
+                    await fetchBuscaUsuario();
+                    setUsuarioSelecionado(null)
+                }}
+                />
             )}
         </>
     );
