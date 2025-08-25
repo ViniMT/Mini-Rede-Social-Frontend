@@ -1,80 +1,102 @@
-export async function usuarioFindAll(): Promise<any> {
-    try {
-        const response = await fetch('http://localhost:3000/usuarios', {
-            method: 'GET',
-            headers: { 'Accept': '*/*' }
-        }
-        )
+import { typeUsuarios } from "@/app/types/types";
 
-        if (response.ok) {
-            const data = await response.json()
-            return data
-        }
+export async function usuarioFindAll(): Promise<typeUsuarios[] | undefined> {
+  try {
+    const response = await fetch(`http://localhost:3000/usuarios/`, {
+      method: "GET",
+    });
 
-    } catch {
-        alert('Erro ao consultar usuário')
-        return []
+    if (response.ok) {
+      const data: typeUsuarios[] = await response.json();
+      return data;
     }
+  } catch {
+    alert("Erro ao buscar usuários");
+    return [];
+  }
 }
 
-export async function usuarioUpdate(id: number, body: any): Promise<any> {
-    try {
-        const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body),
-        }
-        )
+export async function usuarioFindOneByEmailPass(
+  email: string,
+  pass: string
+): Promise<typeUsuarios[] | undefined> {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/usuarios/${email}/${pass}`,
+      {
+        method: "GET",
+      }
+    );
 
-        if (response.ok) {
-            const data = await response.json()
-            return data
-        }
-
-    } catch {
-        alert('Erro ao alterar o usuário')
-        return []
+    if (response.ok) {
+      const data: typeUsuarios[] = await response.json();
+      return data;
     }
+  } catch {
+    alert("Erro ao buscar usuário");
+    return [];
+  }
 }
 
-export async function usuarioDelete(id: number): Promise<any> {
-    try {
-        const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
-            method: 'DELETE',
-        }
-        )
+export async function usuarioUpdate(
+  id: number,
+  body: typeUsuarios
+): Promise<typeUsuarios | undefined> {
+  try {
+    const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
 
-        if (response.ok) {
-            const data = await response.json()
-            return data
-        }
-
-    } catch {
-        alert('Erro ao excluir o usuário')
-        return []
+    if (response.ok) {
+      const data: typeUsuarios = await response.json();
+      return data;
     }
+  } catch {
+    alert("Erro ao alterar o usuário");
+    return undefined;
+  }
 }
 
-export async function usuarioCreate(body: any): Promise<any> {
-    try {
-        const response = await fetch(`http://localhost:3000/usuarios/`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body),
-        }
-        )
+export async function usuarioDelete(
+  id: number
+): Promise<typeUsuarios | undefined> {
+  try {
+    const response = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      method: "DELETE",
+    });
 
-        if (response.ok) {
-            const data = await response.json()
-            return data
-        }
-
-    } catch {
-        alert('Erro ao criar o usuário')
-        return []
+    if (response.ok) {
+      const data: typeUsuarios = await response.json();
+      return data;
     }
+  } catch {
+    alert("Erro ao alterar o usuário");
+    return undefined;
+  }
+}
+
+export async function usuarioCreate(
+  body: typeUsuarios
+): Promise<typeUsuarios | undefined> {
+  try {
+    const response = await fetch(`http://localhost:3000/usuarios/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data: typeUsuarios = await response.json();
+      return data;
+    }
+  } catch {
+    alert("Erro ao alterar o usuário");
+    return undefined;
+  }
 }
