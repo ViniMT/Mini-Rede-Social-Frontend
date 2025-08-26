@@ -3,19 +3,27 @@
 import Link from "next/link";
 import { usuarioFindOneByEmailPass } from "./lib/api/usuarios";
 import { typeUsuarios } from "./types/types";
-import { useState } from "react";
+import { use, useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "./context/context";
 
 const Index = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [usuario, SetUsuarios] = useState<typeUsuarios>();
+  const [usuario, SetUsuarios] = useState<typeUsuarios[]>();
   const [erro, setErro] = useState("");
+
+  const {login} = useAuth();
+  const router = useRouter();
 
   const fecthSearchUser = async (email: string, pass: string) => {
     const response = await usuarioFindOneByEmailPass(email, pass);
     if (response) {
+      SetUsuarios(response);
       setErro("");
-      SetUsuarios(response[0]);
+      login();
+
+      router.push("/postagens");
     } else {
       setErro("Usuário ou senha incorretos");
     }

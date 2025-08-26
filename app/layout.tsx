@@ -1,4 +1,5 @@
 import MenuLateral from "./componentes/menuLateral";
+import { AuthProvider } from "./context/context";
 
 export default function RootLayout({
   children,
@@ -7,11 +8,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body style={{ margin: 0, fontFamily: "Arial, Sans-serif"}}>
-        <div style={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}>
-          <MenuLateral />
-          <main style={{flex: 1, padding: "20px"}}>{children}</main>
-        </div>
+      <body style={{ margin: 0, fontFamily: "Arial, Sans-serif" }}>
+        <AuthProvider>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              minHeight: "100vh",
+            }}
+          >
+            <MenuLateral />
+            <main style={{ flex: 1, padding: "20px" }}>{children}</main>
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

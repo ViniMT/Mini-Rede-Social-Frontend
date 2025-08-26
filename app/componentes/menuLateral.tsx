@@ -1,11 +1,22 @@
+//Menu Lateral
+
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "../context/context";
 
 const MenuLateral = () => {
   const pathname = usePathname();
   const [colapsado, setColapsado] = useState<boolean>(false);
+
+  const { isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+
+  const abandonar = () => {
+    logout();
+    router.push("/");
+  };
 
   return (
     <aside
@@ -36,72 +47,60 @@ const MenuLateral = () => {
       </button>
 
       <h3>Menu</h3>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0, width: "100%" }}>
-        <li
-          style={{
-            padding: "10px",
-            background: pathname === "/" ? "#1565c0" : "transparent",
-            textAlign: colapsado ? "center" : "left",
-          }}
-        >
-          <Link
-            href={"/"}
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: colapsado ? "center" : "flex-start",
-              gap: colapsado ? 0 : "10px",
-            }}
-          >
-            🏠 {colapsado ? "" : "Home"}
-          </Link>
-        </li>
-        <li
-          style={{
-            padding: "10px",
-            background: pathname === "/usuarios" ? "#1565c0" : "transparent",
-            textAlign: colapsado ? "center" : "left",
-          }}
-        >
-          <Link
-            href={"/usuarios"}
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: colapsado ? "center" : "flex-start",
-              gap: colapsado ? 0 : "10px",
-            }}
-          >
-            👤 {colapsado ? "" : "Usuários"}
-          </Link>
-        </li>
 
-        <li
-          style={{
-            padding: "10px",
-            background: pathname === "/usuarios" ? "#1565c0" : "transparent",
-            textAlign: colapsado ? "center" : "left",
-          }}
-        >
-          <Link
-            href={"/postagens"}
+      {isAuthenticated ? (
+        <ul style={{ listStyle: "none", padding: 0, margin: 0, width: "100%" }}>
+          <li
             style={{
-              textDecoration: "none",
-              color: "inherit",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: colapsado ? "center" : "flex-start",
-              gap: colapsado ? 0 : "10px",
+              padding: "10px",
+              background: pathname === "/usuarios" ? "#1565c0" : "transparent",
+              textAlign: colapsado ? "center" : "left",
             }}
           >
-            💬 {colapsado ? "" : "Postagens"}
-          </Link>
-        </li>
-      </ul>
+            <Link
+              href={"/usuarios"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              👤 {colapsado ? "" : "Usuários"}
+            </Link>
+          </li>
+
+          <li
+            style={{
+              padding: "10px",
+              background: pathname === "/postagens" ? "#1565c0" : "transparent",
+              textAlign: colapsado ? "center" : "left",
+            }}
+          >
+            <Link
+              href={"/postagens"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              💬 {colapsado ? "" : "Postagens"}
+            </Link>
+          </li>
+
+          {/* Botão de logout */}
+          <li style={{ padding: "10px", marginTop: "auto" }}>
+            <button
+              onClick={abandonar}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "transparent",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              🔓 {colapsado ? "" : "Sair"}
+            </button>
+          </li>
+        </ul>
+      ) : (
+        <p style={{ marginTop: "20px" }}>🔒 Faça login para acessar</p>
+      )}
     </aside>
   );
 };
